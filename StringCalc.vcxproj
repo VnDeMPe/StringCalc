@@ -88,6 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,7 +140,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArithDebug.cpp" />
+    <ClCompile Include="Arithmetic.cpp" />
+    <ClCompile Include="ArithProc.cpp" />
     <ClCompile Include="StringCalc.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArithDebug.h" />
+    <ClInclude Include="Arithmetic.h" />
+    <ClInclude Include="ArithProc.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
