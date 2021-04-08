@@ -6,7 +6,7 @@
 
 class ArithProc : public Arithmetic
 {
-protected: // for debugger only 
+protected: 
 	  //inline static std::list<double> stringValues;
 	  //inline static std::list<char> stringOperands;
 	  inline static std::vector<double> arrayOfValues;

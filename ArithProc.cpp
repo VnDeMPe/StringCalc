@@ -1,5 +1,6 @@
 #include "ArithProc.h"
-//Class designed to process and output the data
+#include "ArithDebug.h"
+///////////Class designed to process and output the data///////////
 
 //To do:
 //Separate scanstring with process string. There should be separated methods. One for scan and save to vectors, and second for process the data.
@@ -8,51 +9,61 @@
 //Protect from stack overflow!!! 
 //Clean the code, its getting messy
 
-std::string ArithProc::RemoveSpaces(std::string inputString)
+
+
+
+std::string ArithProc::RemoveSpaces(std::string inputString)  //	if there is space found, remove it. Afterwards erase left empty fields in the string
 {
 	inputString.erase(remove_if(inputString.begin(), inputString.end(), isspace), inputString.end());
+	ArithDebug::DebugDisplayString(inputString,"Full string to be calculated:");
 	return inputString;
 }
 
-void ArithProc::ScanString(std::string inputString) //
+void ArithProc::ScanString(std::string inputString) //	Scans the string, separates numbers and operators, saves it to the vector and calculates it. 
 {
 	ClearVectors();
-	double tempArg;
+
 	while (inputString.size() > 0)
 	{
 		int j = 0;
-		if (isdigit(inputString[j]) || (inputString[j] == '.')) // || ((inputString[j] == '-') && (!isdigit(inputString[j+1]))))
+		if (isdigit(inputString[j]) || (inputString[j] == '.')) //	if its a digit, value is saved to the array. Afterwards digit in String is removed  
 		{
-			while (isdigit(inputString[j]) || (inputString[j] == '.'))
-				j++;
 			std::size_t digitEnd;
-			tempArg = std::stod(inputString, &digitEnd);
+			double tempArg = std::stod(inputString, &digitEnd); 
 			arrayOfValues.push_back(tempArg);
 			inputString = inputString.substr(digitEnd);
 		}
 		else if (inputString[j] == '(')
 		{
-			// Not finished! Don't go there yet. 
-			std::cout << "Brackets! Not coded" << std::endl; 
+			for (int i = 0; i < inputString.size(); i++)
+			{
+				if (inputString[i] == ')')  //	if its a simple pair of brackets, store the current values and do the recursion 
+				{
+					std::string stringInBrackets = inputString.substr(1, i - 1);
+					inputString.erase(inputString.begin(), inputString.begin() + i + 1);
 
-			
-			//while ) or (  -> if ) - ble ble // else if ( - ble bleh 
-			//if its ) then its ez
-			//i cut the string and calculate it already?
-			//i mean what is the other choice
-			// but i wanted separately scan string and save it to the array
-			// and this way i have to calculate the full array
-			
-			inputString.erase(inputString.begin());
-			std::vector<double> tempValues = arrayOfValues;
-			std::vector<char> tempOperands = arrayOfOperands;
-			ScanString("7+7+7");
-			arrayOfValues.insert(arrayOfValues.end(), tempValues.begin(), tempValues.end());
-			arrayOfOperands.insert(arrayOfOperands.end(), tempOperands.begin(), tempOperands.end());
-			
-			//stringValues.splice(stringValues.begin(), tempValues);
-			//stringOperands.splice(stringOperands.begin(), tempOperands);
+					std::vector<double> tempValues = arrayOfValues;
+					std::vector<char> tempOperands = arrayOfOperands;
+					std::vector<int> tempPos1 = charPositionLvl1, tempPos2 = charPositionLvl2, tempPos3 = charPositionLvl3;
 
+					ArithDebug::DebugDisplayString(stringInBrackets, "Found String in Brackets:");
+
+					ScanString(stringInBrackets);
+					charPositionLvl1 = tempPos1;
+					charPositionLvl2 = tempPos2;
+					charPositionLvl3 = tempPos3;
+					tempValues.insert(tempValues.end(), arrayOfValues.begin(), arrayOfValues.end());
+					arrayOfValues = tempValues;
+					tempOperands.insert(tempOperands.end(), arrayOfOperands.begin(), arrayOfOperands.end());
+					arrayOfOperands = tempOperands;
+
+					ArithDebug::DebugDisplayValues("Array Values after solving brackets: (right side is not finished yet)");
+				}
+				else if (inputString[i] == '(') // next bracket found
+				{
+					// to be made 
+				}
+			}
 		}
 		else
 		{
@@ -74,22 +85,18 @@ void ArithProc::ScanString(std::string inputString) //
 			inputString.erase(inputString.begin());
 		}
 	}
-	int res = DoTheMath();
-	std::cout << res << std::endl;
-	//	displayValues();
+
+	double res = DoTheMath();
 }
 
 
 double ArithProc::DoTheMath()
 {
 	std::vector<double> notProcessedOperands, notProcessedValues; //Operands and numbers which were not processed yet 
-
+	ArithDebug::DebugDisplayValues("Solving:");
 	unsigned int numOp = 0;
 
 	double result = 0;
-	std::cout << "Sizes powersqrt : " << charPositionLvl1.size() << std::endl;
-	std::cout << "Sizes muldidivide : " << charPositionLvl2.size() << std::endl;
-	std::cout << "Sizes plusminus : " << charPositionLvl3.size() << std::endl;
 
 	if (charPositionLvl1.size() > 0) //Power or sqrt 
 	{
@@ -105,7 +112,7 @@ double ArithProc::DoTheMath()
 				arrayOfValues.erase(arrayOfValues.begin() + charPositionLvl1[i] + 1);
 				arrayOfOperands.erase(arrayOfOperands.begin() + charPositionLvl1[i]);
 				numOp++;
-				//ArithDebug::DebugDisplayValues();
+				ArithDebug::DebugDisplayValues("Power done");
 			}
 			else if (arrayOfOperands[charPositionLvl1[i]] == '$')
 			{
@@ -114,7 +121,7 @@ double ArithProc::DoTheMath()
 				arrayOfValues.erase(arrayOfValues.begin() + charPositionLvl1[i] + 1);
 				arrayOfOperands.erase(arrayOfOperands.begin() + charPositionLvl1[i]);
 				numOp++;
-				//ArithDebug::DebugDisplayValues();
+				ArithDebug::DebugDisplayValues("root done, result:");
 			}
 		}
 	}
@@ -130,7 +137,7 @@ double ArithProc::DoTheMath()
 				arrayOfOperands.erase(arrayOfOperands.begin() + i);
 				numOp++;
 				i--;
-				//ArithDebug::DebugDisplayValues();
+				ArithDebug::DebugDisplayValues("multiply done, result:");
 			}
 			else if (arrayOfOperands[i] == '/')
 			{
@@ -140,7 +147,7 @@ double ArithProc::DoTheMath()
 				arrayOfOperands.erase(arrayOfOperands.begin() + i);
 				numOp++;
 				i--;
-				//ArithDebug::DebugDisplayValues();
+				ArithDebug::DebugDisplayValues("divide done, result:");
 			}
 		}
 	}
@@ -160,7 +167,7 @@ double ArithProc::DoTheMath()
 				arrayOfValues.erase(arrayOfValues.begin() + charPositionLvl3[i] + 1);
 				arrayOfOperands.erase(arrayOfOperands.begin() + charPositionLvl3[i]);
 				numOp++;
-				//ArithDebug::DebugDisplayValues();
+				ArithDebug::DebugDisplayValues("add done, result:");
 			}
 			else if (arrayOfOperands[charPositionLvl3[i]] == '-')
 			{
@@ -169,7 +176,7 @@ double ArithProc::DoTheMath()
 				arrayOfValues.erase(arrayOfValues.begin() + charPositionLvl3[i] + 1);
 				arrayOfOperands.erase(arrayOfOperands.begin() + charPositionLvl3[i]);
 				numOp++;
-				//ArithDebug::DebugDisplayValues();
+				ArithDebug::DebugDisplayValues("substract done, result:");
 
 			}
 		}
