@@ -35,51 +35,69 @@ void ArithProc::ScanString(std::string inputString) //	Scans the string, separat
 		}
 		else if (inputString[j] == '(')
 		{
-			for (int i = 0; i < inputString.size(); i++)
+		
+			std::vector<int> MultiBracketsPos;
+			MultiBracketsPos.push_back(0); // first bracket is always on 0 position 
+			for (int i = 1; i < inputString.size(); i++)
 			{
 				if (inputString[i] == ')')  //	if its a simple pair of brackets, store the current values and do the recursion 
 				{
-					std::string stringInBrackets = inputString.substr(1, i - 1);
-					inputString.erase(inputString.begin(), inputString.begin() + i + 1);
 
+					std::string stringInBrackets = inputString.substr(MultiBracketsPos.back() + 1, i - MultiBracketsPos.size());		 //  create a substring 
+					inputString.erase(inputString.begin() + MultiBracketsPos.back(), inputString.begin() + i + 1); //	 remove substring + brackets from main string 
+					
 					std::vector<double> tempValues = arrayOfValues;
 					std::vector<char> tempOperands = arrayOfOperands;
-					std::vector<int> tempPos1 = charPositionLvl1, tempPos2 = charPositionLvl2, tempPos3 = charPositionLvl3;
+					std::vector<int> tempPos1 = OperatorPositionLvl1, tempPos2 = OperatorPositionLvl2, tempPos3 = OperatorPositionLvl3;
 
 					ArithDebug::DebugDisplayString(stringInBrackets, "Found String in Brackets:");
 
 					ScanString(stringInBrackets);
-					charPositionLvl1 = tempPos1;
-					charPositionLvl2 = tempPos2;
-					charPositionLvl3 = tempPos3;
-					tempValues.insert(tempValues.end(), arrayOfValues.begin(), arrayOfValues.end());
+
+					if (MultiBracketsPos.size() > 1)  //more brackets to close
+					{
+						i = 0;
+						inputString.insert(MultiBracketsPos.back(), std::to_string(arrayOfValues[0]));
+						ArithDebug::DebugDisplayString(inputString, "My new string:");
+					}
+
+					else // all brackets closed 
+					{
+						i = inputString.size();
+						tempValues.push_back(arrayOfValues[0]); //push back the calculated value 
+					}
+
+					OperatorPositionLvl1 = tempPos1;  //saved arrays with position of operands 
+					OperatorPositionLvl2 = tempPos2;
+					OperatorPositionLvl3 = tempPos3;
+
 					arrayOfValues = tempValues;
-					tempOperands.insert(tempOperands.end(), arrayOfOperands.begin(), arrayOfOperands.end());
 					arrayOfOperands = tempOperands;
 
+					MultiBracketsPos.pop_back();
 					ArithDebug::DebugDisplayValues("Array Values after solving brackets: (right side is not finished yet)");
 				}
 				else if (inputString[i] == '(') // next bracket found
 				{
-					// to be made 
+					MultiBracketsPos.push_back(i);  // save the position of open bracket
 				}
 			}
-		}
-		else
+		} 
+		else  if (!isalpha(inputString[j]))  // if its an operand add it to one of three arrays depend of the order of operations
 		{
 			arrayOfOperands.push_back(inputString[0]);
 
 			if ((inputString[j] == '+') || (inputString[j] == '-'))
 			{
-				charPositionLvl3.push_back(arrayOfOperands.size() - 1);
+				OperatorPositionLvl3.push_back(arrayOfOperands.size() - 1);
 			}
 			else if ((inputString[j] == '*') || (inputString[j] == '/'))
 			{
-				charPositionLvl2.push_back(arrayOfOperands.size() - 1);
+				OperatorPositionLvl2.push_back(arrayOfOperands.size() - 1);
 			}
 			else if ((inputString[j] == '^') || (inputString[j] == '$'))
 			{
-				charPositionLvl1.push_back(arrayOfOperands.size() - 1);
+				OperatorPositionLvl1.push_back(arrayOfOperands.size() - 1);
 			}
 
 			inputString.erase(inputString.begin());
@@ -98,34 +116,35 @@ double ArithProc::DoTheMath()
 
 	double result = 0;
 
-	if (charPositionLvl1.size() > 0) //Power or sqrt 
+	if (OperatorPositionLvl1.size() > 0) //Power or sqrt 
 	{
-		for (int i = 0; i < charPositionLvl1.size(); i++)
+		for (int i = 0; i < OperatorPositionLvl1.size(); i++)
 		{
-			charPositionLvl1[i] -= numOp;
-			if (charPositionLvl1[i] < 0)
-				charPositionLvl1[i] = 0;
-			if (arrayOfOperands[charPositionLvl1[i]] == '^')
+			OperatorPositionLvl1[i] -= numOp;
+			if (OperatorPositionLvl1[i] < 0)
+				OperatorPositionLvl1[i] = 0;
+			if (arrayOfOperands[OperatorPositionLvl1[i]] == '^')
 			{
-				result = Power(arrayOfValues[charPositionLvl1[i]], static_cast<int>(arrayOfValues[charPositionLvl1[i] + 1]));
-				arrayOfValues[charPositionLvl1[i]] = result;
-				arrayOfValues.erase(arrayOfValues.begin() + charPositionLvl1[i] + 1);
-				arrayOfOperands.erase(arrayOfOperands.begin() + charPositionLvl1[i]);
+				result = Power(arrayOfValues[OperatorPositionLvl1[i]], static_cast<int>(arrayOfValues[OperatorPositionLvl1[i] + 1]));
+				arrayOfValues[OperatorPositionLvl1[i]] = result;
+				arrayOfValues.erase(arrayOfValues.begin() + OperatorPositionLvl1[i] + 1);
+				arrayOfOperands.erase(arrayOfOperands.begin() + OperatorPositionLvl1[i]);
 				numOp++;
 				ArithDebug::DebugDisplayValues("Power done");
 			}
-			else if (arrayOfOperands[charPositionLvl1[i]] == '$')
+			else if (arrayOfOperands[OperatorPositionLvl1[i]] == '$')
 			{
-				result = Root(arrayOfValues[charPositionLvl1[i]], static_cast<int>(arrayOfValues[charPositionLvl1[i] + 1]));
-				arrayOfValues[charPositionLvl1[i]] = result;
-				arrayOfValues.erase(arrayOfValues.begin() + charPositionLvl1[i] + 1);
-				arrayOfOperands.erase(arrayOfOperands.begin() + charPositionLvl1[i]);
+				result = Root(arrayOfValues[OperatorPositionLvl1[i]], static_cast<int>(arrayOfValues[OperatorPositionLvl1[i] + 1]));
+				arrayOfValues[OperatorPositionLvl1[i]] = result;
+				arrayOfValues.erase(arrayOfValues.begin() + OperatorPositionLvl1[i] + 1);
+				arrayOfOperands.erase(arrayOfOperands.begin() + OperatorPositionLvl1[i]);
 				numOp++;
 				ArithDebug::DebugDisplayValues("root done, result:");
 			}
 		}
 	}
-	if (charPositionLvl2.size() > 0) //Multiply or divide
+
+	if (OperatorPositionLvl2.size() > 0) //Multiply or divide
 	{
 		for (int i = 0; i < arrayOfOperands.size(); i++)
 		{
@@ -152,29 +171,29 @@ double ArithProc::DoTheMath()
 		}
 	}
 
-	if (charPositionLvl3.size() > 0)	//add or substract 
+	if (OperatorPositionLvl3.size() > 0)	//add or substract 
 	{
 
-		for (int i = 0; i < charPositionLvl3.size(); i++)
+		for (int i = 0; i < OperatorPositionLvl3.size(); i++)
 		{
-			charPositionLvl3[i] -= numOp;
-			if (charPositionLvl3[i] < 0)
-				charPositionLvl3[i] = 0;
-			if (arrayOfOperands[charPositionLvl3[i]] == '+')
+			OperatorPositionLvl3[i] -= numOp;
+			if (OperatorPositionLvl3[i] < 0)
+				OperatorPositionLvl3[i] = 0;
+			if (arrayOfOperands[OperatorPositionLvl3[i]] == '+')
 			{
-				result = Add(arrayOfValues[charPositionLvl3[i]], arrayOfValues[charPositionLvl3[i] + 1]);
-				arrayOfValues[charPositionLvl3[i]] = result;
-				arrayOfValues.erase(arrayOfValues.begin() + charPositionLvl3[i] + 1);
-				arrayOfOperands.erase(arrayOfOperands.begin() + charPositionLvl3[i]);
+				result = Add(arrayOfValues[OperatorPositionLvl3[i]], arrayOfValues[OperatorPositionLvl3[i] + 1]);
+				arrayOfValues[OperatorPositionLvl3[i]] = result;
+				arrayOfValues.erase(arrayOfValues.begin() + OperatorPositionLvl3[i] + 1);
+				arrayOfOperands.erase(arrayOfOperands.begin() + OperatorPositionLvl3[i]);
 				numOp++;
 				ArithDebug::DebugDisplayValues("add done, result:");
 			}
-			else if (arrayOfOperands[charPositionLvl3[i]] == '-')
+			else if (arrayOfOperands[OperatorPositionLvl3[i]] == '-')
 			{
-				result = Substract(arrayOfValues[charPositionLvl3[i]], arrayOfValues[charPositionLvl3[i] + 1]);
-				arrayOfValues[charPositionLvl3[i]] = result;
-				arrayOfValues.erase(arrayOfValues.begin() + charPositionLvl3[i] + 1);
-				arrayOfOperands.erase(arrayOfOperands.begin() + charPositionLvl3[i]);
+				result = Substract(arrayOfValues[OperatorPositionLvl3[i]], arrayOfValues[OperatorPositionLvl3[i] + 1]);
+				arrayOfValues[OperatorPositionLvl3[i]] = result;
+				arrayOfValues.erase(arrayOfValues.begin() + OperatorPositionLvl3[i] + 1);
+				arrayOfOperands.erase(arrayOfOperands.begin() + OperatorPositionLvl3[i]);
 				numOp++;
 				ArithDebug::DebugDisplayValues("substract done, result:");
 
@@ -220,7 +239,7 @@ void ArithProc::ClearVectors()
 {
 	arrayOfValues.clear();
 	arrayOfOperands.clear();
-	charPositionLvl1.clear();
-	charPositionLvl2.clear();
-	charPositionLvl3.clear();
+	OperatorPositionLvl1.clear();
+	OperatorPositionLvl2.clear();
+	OperatorPositionLvl3.clear();
 }

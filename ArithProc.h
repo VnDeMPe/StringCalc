@@ -11,7 +11,7 @@ protected:
 	  //inline static std::list<char> stringOperands;
 	  inline static std::vector<double> arrayOfValues;
 	  inline static std::vector<char> arrayOfOperands;
-	  inline static std::vector<int> charPositionLvl1, charPositionLvl2, charPositionLvl3;
+	  inline static std::vector<int> OperatorPositionLvl1, OperatorPositionLvl2, OperatorPositionLvl3;
 
 public:
 	static std::string RemoveSpaces(std::string inputString);
