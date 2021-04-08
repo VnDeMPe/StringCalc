@@ -5,6 +5,7 @@
 //To do:
 //Add Try Catch Throw !!!! 
 //Expand functionality 
+//implement minus power fe 2^-3 
 
 double Arithmetic::Add(double arg1, double arg2)
 {

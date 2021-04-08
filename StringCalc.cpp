@@ -3,19 +3,25 @@
 //Main program 
 
 //To do
-//Clean main 
 //Add user interface - new class? 
 
 #include <iostream>
 #include "Arithmetic.h"
 #include "ArithProc.h"
-#include "ArithDebug.h"
+//#include "ArithDebug.h"
 
 
 int main()
-{
-    std::string testStr2 = " (2 + 3) * ((4+ 5+ 6)*2) * 3 -128$7";
-    testStr2 = ArithProc::RemoveSpaces(testStr2);
-    ArithProc::ScanString(testStr2);
-    ArithDebug::DebugDisplayValues();
+{   
+    std::cout << "String Calculator" << std::endl;
+    std::cout << "Instructions:\n '+' for addition\n '-' for substraction\n '*' for multiplication\n '/' for division\n '^' for exponentiation (example: 2^5 will return 32)\n '$' for square rooting (example: 32$5 will return 2)" << std::endl;
+    std::string testStr = " (2 + 3) * ((4+ 5+ 6)*2) * 3 -128$7";
+    std::cout << "example input: " << testStr;
+    ArithProc::CalculateIt(testStr);
+    std::string inputString;
+    std::cout << "Enter the data: ";
+    std::getline(std::cin, inputString);
+    std::cout << inputString << std::endl;
+    ArithProc::CalculateIt(inputString);
 }
+

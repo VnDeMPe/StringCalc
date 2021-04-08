@@ -7,8 +7,8 @@ void ArithDebug::DebugDisplayValues() //Displays values and operands left in an 
 	for (int i = 0; i < arrayOfValues.size(); i++)
 	{
 		std::cout << arrayOfValues[i] << " ";
-		if (i < arrayOfOperands.size())
-			std::cout << arrayOfOperands[i] << " ";
+		if (i < arrayOfOperators.size())
+			std::cout << arrayOfOperators[i] << " ";
 	}
 	std::cout << std::endl;
 }
@@ -19,8 +19,8 @@ void ArithDebug::DebugDisplayValues(std::string comment)
 	for (int i = 0; i < arrayOfValues.size(); i++) 
 	{
 		std::cout << arrayOfValues[i] << " ";
-		if (i < arrayOfOperands.size())
-		std::cout  << arrayOfOperands[i] << " ";
+		if (i < arrayOfOperators.size())
+		std::cout  << arrayOfOperators[i] << " ";
 	}
 	std::cout << std::endl;
 }
