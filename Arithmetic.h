@@ -1,6 +1,11 @@
 #pragma once
+#ifndef ARITHMETIC_H_
+#define ARITHMETIC_H_
+
+
+
 #include <math.h>
-//
+#include <iostream>
 
 class Arithmetic
 {
@@ -13,3 +18,4 @@ public:
 	static double Root(double arg1, int rootNum);
 };
 
+#endif // !ARITHMETIC_H_

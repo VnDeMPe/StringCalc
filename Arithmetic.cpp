@@ -1,4 +1,5 @@
 #include "Arithmetic.h"
+#include "CalcException.h"
 
 //Basic Arithmetic operations Class
 
@@ -19,7 +20,16 @@ double Arithmetic::Substract(double arg1, double arg2)
 
 double Arithmetic::Divide(double arg1, double arg2)
 {
-	return arg1 / arg2;
+	try {
+		if (arg2 == 0)  throw CalcZeroException( __FILE__, __LINE__, __func__, arg1, arg2 );
+		return arg1 / arg2;
+	}
+
+	catch (CalcZeroException& error)
+	{
+		std::cout << error.what() << error.get_info() << std::endl;
+		return arg1 / 1;
+	}
 }
 
 double Arithmetic::Multiply(double arg1, double arg2)

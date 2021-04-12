@@ -2,25 +2,25 @@
 
 //Class created only for Debug purposes. 
 
-void ArithDebug::DebugDisplayValues() //Displays values and operands left in an array / vector
+void ArithDebug::DebugDisplayValues(std::vector<double> inputDoubleVector, std::vector<char> inputCharVector) //Displays values and operands left in an array / vector
 {
-	for (int i = 0; i < arrayOfValues.size(); i++)
+	for (int i = 0; i < inputDoubleVector.size(); i++)
 	{
-		std::cout << arrayOfValues[i] << " ";
-		if (i < arrayOfOperators.size())
-			std::cout << arrayOfOperators[i] << " ";
+		std::cout << inputDoubleVector[i] << " ";
+		if (i < inputCharVector.size())
+			std::cout << inputCharVector[i] << " ";
 	}
 	std::cout << std::endl;
 }
 
-void ArithDebug::DebugDisplayValues(std::string comment) 
+void ArithDebug::DebugDisplayValues(std::vector<double> inputDoubleVector, std::vector<char> inputCharVector, std::string comment)
 {
 	std::cout << comment << std::endl; 
-	for (int i = 0; i < arrayOfValues.size(); i++) 
+	for (int i = 0; i < inputDoubleVector.size(); i++)
 	{
-		std::cout << arrayOfValues[i] << " ";
-		if (i < arrayOfOperators.size())
-		std::cout  << arrayOfOperators[i] << " ";
+		std::cout << inputDoubleVector[i] << " ";
+		if (i < inputCharVector.size())
+		std::cout  << inputCharVector[i] << " ";
 	}
 	std::cout << std::endl;
 }
