@@ -4,9 +4,10 @@
 
 
 #include "Arithmetic.h"
-#include <iostream>
 #include <vector>
 #include <string>
+
+//getters setters
 
 
 class ArithProc : public Arithmetic
@@ -20,10 +21,7 @@ protected:
 	  
 
 public:
-	static bool IsAllowedSymbol(char c);
-	static bool IsSymbolTypoo(char c1, char c2);
-	static std::string RemoveSpaces(std::string inputString);
-	static std::string CheckString(std::string inputString);
+
 	static void ClearVectors();
 
 	static void ScanString(std::string inputString);

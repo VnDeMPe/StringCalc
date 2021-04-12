@@ -30,6 +30,9 @@
     <ClCompile Include="CalcException.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StringInit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arithmetic.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CalcException.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StringInit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

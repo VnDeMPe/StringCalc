@@ -1,6 +1,8 @@
 #include "ArithDebug.h"
-
+#include <iostream>
 //Class created only for Debug purposes. 
+
+bool ArithDebug::debugMode = false;
 
 void ArithDebug::DebugDisplayValues(std::vector<double> inputDoubleVector, std::vector<char> inputCharVector) //Displays values and operands left in an array / vector
 {
@@ -34,4 +36,17 @@ void ArithDebug::DebugDisplayString(std::string inputString)
 void ArithDebug::DebugDisplayString(std::string inputString, std::string comment)
 {
 	std::cout << comment << std::endl << inputString << std::endl;
+}
+
+void ArithDebug::SetDebugMode(bool isDebug)
+{
+	debugMode = isDebug;
+}
+
+bool ArithDebug::IsDebugMode()
+{
+	if (debugMode == true)
+		return true;
+	else
+		return false;
 }

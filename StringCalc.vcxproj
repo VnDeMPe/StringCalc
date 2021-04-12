@@ -145,12 +145,14 @@
     <ClCompile Include="ArithProc.cpp" />
     <ClCompile Include="CalcException.cpp" />
     <ClCompile Include="StringCalc.cpp" />
+    <ClCompile Include="StringInit.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArithDebug.h" />
     <ClInclude Include="Arithmetic.h" />
     <ClInclude Include="ArithProc.h" />
     <ClInclude Include="CalcException.h" />
+    <ClInclude Include="StringInit.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

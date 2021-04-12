@@ -5,10 +5,10 @@
 //To do
 //Add user interface - new class? 
 
-#include <iostream>
 #include "Arithmetic.h"
 #include "ArithProc.h"
 #include "ArithDebug.h"
+#include <iostream>
 
 void intro()
 {
@@ -21,11 +21,12 @@ void intro()
 
 int main()
 {   
+    ArithDebug::SetDebugMode(false);
     intro();
     
     char tryAgain;
     do
-    { 
+    {                                          
     std::string inputString;
     std::cout << "Enter the data: ";
     std::getline(std::cin >>std::ws, inputString);

@@ -2,11 +2,6 @@
 #ifndef ARITHMETIC_H_
 #define ARITHMETIC_H_
 
-
-
-#include <math.h>
-#include <iostream>
-
 class Arithmetic
 {
 public:

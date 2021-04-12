@@ -2,10 +2,9 @@
 #ifndef CALCEXCEPTION_H_
 #define CALCEXCEPTION_H_
 
-#include <iostream>
+#include <string>
 #include <exception>
 #include <stdexcept>
-#include <sstream>
 
 class CalcException : public std::runtime_error {
 

@@ -1,5 +1,6 @@
 #include "Arithmetic.h"
 #include "CalcException.h"
+#include <iostream>
 
 //Basic Arithmetic operations Class
 
