@@ -9,9 +9,17 @@
 //Separate scanstring with process string. There should be separated methods. One for scan and save to vectors, and second for process the data.
 //Protect from stack overflow
 //Clean the code, its getting messy
-//create prepare input string class
 
+double ArithProc::CalculateIt(std::string inputString)
+{
+	std::string outputString;
+	outputString = StringInit::StringInitiation(inputString);
+	std::cout << "Input String: " << outputString << std::endl;
+	ArithProc::ScanString(outputString);
+	std::cout << "The result is: " << arrayOfValues[0] << std::endl;
 
+	return arrayOfValues[0];
+}
 
 void ArithProc::ScanString(std::string inputString) //	Scans the string, separates numbers and operators, saves it to the vector and calculates it. 
 {
@@ -25,7 +33,7 @@ void ArithProc::ScanString(std::string inputString) //	Scans the string, separat
 	{
 		int j = 0;
 		
-		if (isdigit(inputString[j]) || (inputString[j] == '.') || (minusDigit == true)) //	if its a digit, value is saved to the array. Afterwards digit in String is removed  
+		if (isdigit(inputString[j]) || (inputString[j] == '.') || (minusDigit == true)) //	if its a digit, value is saved to an array. Afterwards digit in string is removed  
 		{
 			std::size_t digitEnd;
 			double tempArg = std::stod(inputString, &digitEnd); 
@@ -33,7 +41,7 @@ void ArithProc::ScanString(std::string inputString) //	Scans the string, separat
 			inputString = inputString.substr(digitEnd);
 			minusDigit = false;
 		}
-		else if (inputString[j] == '(')
+		else if (inputString[j] == '(')   //if there are brackets, they have to be solved first
 		{
 		
 			std::vector<int> MultiBracketsPos;
@@ -204,19 +212,6 @@ double ArithProc::DoTheMath()
 		return result;
 	}
 }
-
-
-double ArithProc::CalculateIt(std::string inputString)
-{
-	std::string outputString;
-	outputString = StringInit::StringInitiation(inputString);
-	std::cout << "Input String: " << outputString << std::endl;
-	ArithProc::ScanString(outputString);
-	std::cout << "The result is: " << arrayOfValues[0] << std::endl; 
-	
-	return 0;
-}
-
 
 void ArithProc::ClearVectors()
 {

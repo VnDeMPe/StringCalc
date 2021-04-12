@@ -76,4 +76,35 @@ public:
     virtual std::string get_info() const override;
 };
 
-#endif // !CALCEXCEPTION_H_
+class CalcOperatorsSyntaxException : public CalcException   // Found alphabet letter in a string
+{
+private:
+    std::string arg1;
+    int i;
+public:
+    CalcOperatorsSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_);
+    virtual std::string get_info() const override;
+};
+
+class CalcMinusSyntaxException : public CalcException   // Found alphabet letter in a string
+{
+private:
+    std::string arg1;
+    int i;
+public:
+    CalcMinusSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_);
+    virtual std::string get_info() const override;
+};
+
+
+class CalcBracketSyntaxException : public CalcException   // Found alphabet letter in a string
+{
+private:
+    std::string arg1;
+    int i;
+public:
+    CalcBracketSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_);
+    virtual std::string get_info() const override;
+};
+
+#endif // !CALCEXCEPTION_H_  

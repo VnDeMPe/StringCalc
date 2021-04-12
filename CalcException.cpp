@@ -1,8 +1,7 @@
 #include "CalcException.h"
 #include <iostream>
 
-
-
+//Handling Exception Classes 
 
 const char* CalcException::get_file() const 
 {
@@ -81,7 +80,7 @@ std::string CalcNotAllowedCharException::get_info() const
 	return (info + "' at position " + std::to_string(i) + ". Symbol has been removed");
 }
 
-CalcFoundTypooException::CalcFoundTypooException(const char* file_, int line_, const char* func_, std::string arg1_, int i_) : CalcException("Syntax Error: Found typoo Symbol.\n", file_, line_, func_, ("Double Symbol character found: '" + arg1_.substr(i_, 1))),
+CalcFoundTypooException::CalcFoundTypooException(const char* file_, int line_, const char* func_, std::string arg1_, int i_) : CalcException("Syntax Error: Found symbol typoo.\n", file_, line_, func_, ("Two same symbol characters occured one after the other: '" + arg1_.substr(i_, 2))),
 arg1(arg1_),
 i(i_)
 {
@@ -89,5 +88,42 @@ i(i_)
 
 std::string CalcFoundTypooException::get_info() const
 {
-	return (info + "' at position " + std::to_string(i) + ". Second ymbol has been removed");
+	return (info + "' at position " + std::to_string(i) + ". Doubled symbol has been removed");
 }
+
+
+CalcOperatorsSyntaxException::CalcOperatorsSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_) : CalcException("Syntax Error: Illegal two operators next to each other.\n", file_, line_, func_, ("Two different Symbol characters found: '" + arg1_.substr(i_, 2))),
+arg1(arg1_),
+i(i_)
+{
+}
+
+std::string CalcOperatorsSyntaxException::get_info() const
+{
+	return (info + "' at position " + std::to_string(i) + ". First symbol has been removed");
+}
+
+
+CalcMinusSyntaxException::CalcMinusSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_) : CalcException("Syntax Error: Two minuses next to each other.\n", file_, line_, func_, ("2 minus operators found: '" + arg1_.substr(i_, 3))),
+arg1(arg1_),
+i(i_)
+{
+}
+
+std::string CalcMinusSyntaxException::get_info() const
+{
+	return (info + "' at position " + std::to_string(i) + ". Two minuses changed to plus");
+}
+
+CalcBracketSyntaxException::CalcBracketSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_) : CalcException("Syntax Error: Closing non open bracket.\n", file_, line_, func_, ("Closed Bracket symbol found without open symbol before: '" + arg1_.substr(i_, 2))),
+arg1(arg1_),
+i(i_)
+{
+}
+
+std::string CalcBracketSyntaxException::get_info() const
+{
+	return (info + "' at position " + std::to_string(i) + ". Bracket has been removed");
+}
+
+
