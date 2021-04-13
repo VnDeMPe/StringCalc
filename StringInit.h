@@ -11,7 +11,7 @@ public:
 	static bool IsArithSymbol(char c);
 	static bool IsSymbolTypoo(char c1, char c2);
 	
-	static std::string StringInitiation(std::string inputString);
+	static std::string StringInitialization(std::string inputString);
 	static std::string RemoveSpaces(std::string inputString);
 	static std::string CheckString(std::string inputString);
 };

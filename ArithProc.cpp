@@ -13,27 +13,25 @@
 double ArithProc::CalculateIt(std::string inputString)
 {
 	std::string outputString;
-	outputString = StringInit::StringInitiation(inputString);
+	outputString = StringInit::StringInitialization(inputString);
 	std::cout << "Input String: " << outputString << std::endl;
-	ArithProc::ScanString(outputString);
+	ArithProc::StringToArrays(outputString);
 	std::cout << "The result is: " << arrayOfValues[0] << std::endl;
 
 	return arrayOfValues[0];
 }
 
-void ArithProc::ScanString(std::string inputString) //	Scans the string, separates numbers and operators, saves it to the vector and calculates it. 
+void ArithProc::StringToArrays(std::string inputString) //	Scans the string, separates numbers and operators, saves it to the vector and calculates it. 
 {
 	ClearVectors();
-
 	bool minusDigit = false;
-	if (inputString[0] == '-')	//special exception for the first digit 
-		minusDigit = true; 
 
-	while (inputString.size() > 0)
-	{
-		int j = 0;
+	if (inputString[0] == '-')	//special exception for the first digit 
+		bool minusDigit = true; 
 		
-		if (isdigit(inputString[j]) || (inputString[j] == '.') || (minusDigit == true)) //	if its a digit, value is saved to an array. Afterwards digit in string is removed  
+	while (inputString.size() > 0)
+	{	
+		if (isdigit(inputString[0]) || (inputString[0] == '.') || (minusDigit == true)) //	if its a digit, value is saved to an array. Afterwards digit in string is removed  
 		{
 			std::size_t digitEnd;
 			double tempArg = std::stod(inputString, &digitEnd); 
@@ -41,37 +39,37 @@ void ArithProc::ScanString(std::string inputString) //	Scans the string, separat
 			inputString = inputString.substr(digitEnd);
 			minusDigit = false;
 		}
-		else if (inputString[j] == '(')   //if there are brackets, they have to be solved first
+		else if (inputString[0] == '(')   //if there are brackets, they have to be solved first
 		{
-		
 			std::vector<int> MultiBracketsPos;
 			MultiBracketsPos.push_back(0); // first bracket is always on 0 position 
-			for (int i = 1; i < inputString.size(); i++)
+			unsigned int i = 1;
+
+			while(MultiBracketsPos.size() > 0)	//while all brackets are not closed
 			{
 				if (inputString[i] == ')')  //	if its a simple pair of brackets, store the current values and do the recursion 
-				{
-
-					std::string stringInBrackets = inputString.substr(MultiBracketsPos.back() + 1, i - MultiBracketsPos.size());		 //  create a substring 
+				{	
+					int subStringLength = i-MultiBracketsPos.back() -1 ;	
+					std::string stringInBrackets = inputString.substr(MultiBracketsPos.back() + 1, subStringLength);		 //  create a substring with data in brackets
 					inputString.erase(inputString.begin() + MultiBracketsPos.back(), inputString.begin() + i + 1); //	 remove substring + brackets from main string 
 					
-					std::vector<double> tempValues = arrayOfValues;
+					std::vector<double> tempValues = arrayOfValues;		// Temp-store arrays of processed data
 					std::vector<char> tempOperators = arrayOfOperators;
 					std::vector<int> tempPos1 = OperatorPositionLvl1, tempPos2 = OperatorPositionLvl2, tempPos3 = OperatorPositionLvl3;
 
 					if (ArithDebug::IsDebugMode()) ArithDebug::DebugDisplayString(stringInBrackets, "Found String in Brackets:");
 
-					ScanString(stringInBrackets);
+					StringToArrays(stringInBrackets);	 //Recurrence!
 
-					if (MultiBracketsPos.size() > 1)  //more brackets to close
+					if (MultiBracketsPos.size() > 1)  // if there are more brackets to close, put the iterator to the second-last bracket
 					{
-						i = 0;
-						inputString.insert(MultiBracketsPos.back(), std::to_string(arrayOfValues[0]));
+						i = MultiBracketsPos.end()[-2];		// end() is past the last element, -1 is for the last and -2 is for the second-last element
+						inputString.insert(MultiBracketsPos.back(), std::to_string(arrayOfValues[0]));	// insert calculated value back to a string
 						if (ArithDebug::IsDebugMode()) ArithDebug::DebugDisplayString(inputString, "My new string:");
 					}
 
-					else // all brackets closed 
+					else //if all brackets are closed, it is last while-loop cycle 
 					{
-						i = inputString.size();
 						tempValues.push_back(arrayOfValues[0]); //push back the calculated value 
 					}
 
@@ -82,33 +80,36 @@ void ArithProc::ScanString(std::string inputString) //	Scans the string, separat
 					arrayOfValues = tempValues;
 					arrayOfOperators = tempOperators;
 
-					MultiBracketsPos.pop_back();
+					MultiBracketsPos.pop_back();	//erase the last element
+
 					if (ArithDebug::IsDebugMode()) ArithDebug::DebugDisplayValues(arrayOfValues, arrayOfOperators,"Array Values after solving brackets: (right side is not finished yet)");
 				}
 				else if (inputString[i] == '(') // next bracket found
 				{
-					MultiBracketsPos.push_back(i);  // save the position of open bracket
+					MultiBracketsPos.push_back(i);  // save the position of the open-bracket
 				}
+
+				i++;
 			}
 		} 
-		else  if (!isalpha(inputString[j]))  // if its an operand add it to one of three arrays depend of the order of operations
+		else  if (!isalpha(inputString[0]))  // if its an operand add it to one of three arrays depend of the order of operations
 		{
 			arrayOfOperators.push_back(inputString[0]);
 
-			if ((inputString[j] == '+') || (inputString[j] == '-'))
+			if ((inputString[0] == '+') || (inputString[0] == '-'))
 			{
 				OperatorPositionLvl3.push_back(arrayOfOperators.size() - 1);
 			}
-			else if ((inputString[j] == '*') || (inputString[j] == '/'))
+			else if ((inputString[0] == '*') || (inputString[0] == '/'))
 			{
 				OperatorPositionLvl2.push_back(arrayOfOperators.size() - 1);
 			}
-			else if ((inputString[j] == '^') || (inputString[j] == '$'))
+			else if ((inputString[0] == '^') || (inputString[0] == '$'))
 			{
 				OperatorPositionLvl1.push_back(arrayOfOperators.size() - 1);
 			}
 			if (inputString.size() >= 2)
-			if ((inputString[j + 1] == '-') && (isdigit(inputString[j+2]) || (inputString[j+2] == '.')))  //  if the next value is minus digit
+			if ((inputString[1] == '-') && (isdigit(inputString[2]) || (inputString[2] == '.')))  //  if the next value is minus digit
 			{
 				minusDigit = true;
 			}
@@ -123,17 +124,17 @@ void ArithProc::ScanString(std::string inputString) //	Scans the string, separat
 double ArithProc::DoTheMath()
 {
 	if (ArithDebug::IsDebugMode()) ArithDebug::DebugDisplayValues(arrayOfValues, arrayOfOperators, "Solving:");
-	unsigned int numOp = 0;
-
+	
 	double result = 0;
 
-	if (OperatorPositionLvl1.size() > 0) //Power or sqrt 
+	if (OperatorPositionLvl1.size() > 0) //if there is Power or sqrt operation
 	{
+		unsigned int numOp = 0;
+
 		for (int i = 0; i < OperatorPositionLvl1.size(); i++)
 		{
 			OperatorPositionLvl1[i] -= numOp;
-			if (OperatorPositionLvl1[i] < 0)
-				OperatorPositionLvl1[i] = 0;
+
 			if (arrayOfOperators[OperatorPositionLvl1[i]] == '^')
 			{
 				result = Power(arrayOfValues[OperatorPositionLvl1[i]], static_cast<int>(arrayOfValues[OperatorPositionLvl1[i] + 1]));
@@ -155,9 +156,10 @@ double ArithProc::DoTheMath()
 		}
 	}
 
-	if (OperatorPositionLvl2.size() > 0) //Multiply or divide
+	if (OperatorPositionLvl2.size() > 0) //If there is Multiply or divide operation
 	{
-		for (int i = 0; i < arrayOfOperators.size(); i++)
+		unsigned int i = 0;
+		while( i < arrayOfOperators.size() )
 		{
 			if (arrayOfOperators[i] == '*')
 			{
@@ -165,9 +167,8 @@ double ArithProc::DoTheMath()
 				arrayOfValues[i] = result;
 				arrayOfValues.erase(arrayOfValues.begin() + i + 1);
 				arrayOfOperators.erase(arrayOfOperators.begin() + i);
-				numOp++;
-				i--;
 				if (ArithDebug::IsDebugMode()) ArithDebug::DebugDisplayValues(arrayOfValues, arrayOfOperators, "multiply done, result:");
+				continue;
 			}
 			else if (arrayOfOperators[i] == '/')
 			{
@@ -175,42 +176,37 @@ double ArithProc::DoTheMath()
 				arrayOfValues[i] = result;
 				arrayOfValues.erase(arrayOfValues.begin() + i + 1);
 				arrayOfOperators.erase(arrayOfOperators.begin() + i);
-				numOp++;
-				i--;
 				if (ArithDebug::IsDebugMode()) ArithDebug::DebugDisplayValues(arrayOfValues, arrayOfOperators, "divide done, result:");
+				continue;
 			}
+			i++;
 		}
 	}
 
-	if (OperatorPositionLvl3.size() > 0)	//add or substract 
+	if (OperatorPositionLvl3.size() > 0)	// If there is add or substract operation
 	{
-
-		for (int i = 0; i < OperatorPositionLvl3.size(); i++)
+		while (arrayOfOperators.size() > 0)
 		{
-			OperatorPositionLvl3[i] -= numOp;
-			if (OperatorPositionLvl3[i] < 0)
-				OperatorPositionLvl3[i] = 0;
-			if (arrayOfOperators[OperatorPositionLvl3[i]] == '+')
+			if (arrayOfOperators[0] == '+')
 			{
-				result = Add(arrayOfValues[OperatorPositionLvl3[i]], arrayOfValues[OperatorPositionLvl3[i] + 1]);
-				arrayOfValues[OperatorPositionLvl3[i]] = result;
-				arrayOfValues.erase(arrayOfValues.begin() + OperatorPositionLvl3[i] + 1);
-				arrayOfOperators.erase(arrayOfOperators.begin() + OperatorPositionLvl3[i]);
-				numOp++;
+				result = Add(arrayOfValues[0], arrayOfValues[1]);
+				arrayOfValues[0] = result;
+				arrayOfValues.erase(arrayOfValues.begin() + 1);
+				arrayOfOperators.erase(arrayOfOperators.begin());
 				if (ArithDebug::IsDebugMode()) ArithDebug::DebugDisplayValues(arrayOfValues, arrayOfOperators, "add done, result:");
 			}
-			else if (arrayOfOperators[OperatorPositionLvl3[i]] == '-')
+			else if (arrayOfOperators[0] == '-')
 			{
-				result = Substract(arrayOfValues[OperatorPositionLvl3[i]], arrayOfValues[OperatorPositionLvl3[i] + 1]);
-				arrayOfValues[OperatorPositionLvl3[i]] = result;
-				arrayOfValues.erase(arrayOfValues.begin() + OperatorPositionLvl3[i] + 1);
-				arrayOfOperators.erase(arrayOfOperators.begin() + OperatorPositionLvl3[i]);
-				numOp++;
+				result = Substract(arrayOfValues[0], arrayOfValues[1]);
+				arrayOfValues[0] = result;
+				arrayOfValues.erase(arrayOfValues.begin() + 1);
+				arrayOfOperators.erase(arrayOfOperators.begin());
 				if (ArithDebug::IsDebugMode()) ArithDebug::DebugDisplayValues(arrayOfValues, arrayOfOperators, "substract done, result:");
 			}
 		}
-		return result;
 	}
+
+	return result;
 }
 
 void ArithProc::ClearVectors()

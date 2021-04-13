@@ -31,7 +31,7 @@ bool StringInit::IsArithSymbol(char c)
 		return false;
 }
 
-std::string StringInit::StringInitiation(std::string inputString)
+std::string StringInit::StringInitialization(std::string inputString)
 {
 	std::string outputString;
 	outputString = StringInit::RemoveSpaces(inputString);

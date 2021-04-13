@@ -24,7 +24,7 @@ public:
 
 	static void ClearVectors();
 
-	static void ScanString(std::string inputString);
+	static void StringToArrays(std::string inputString);
 	static double DoTheMath();
 	static double CalculateIt(std::string inputString);
 

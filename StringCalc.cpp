@@ -23,7 +23,7 @@ int main()
 {   
     ArithDebug::SetDebugMode(false);
     intro();
-    
+
     char tryAgain;
     do
     {                                          
