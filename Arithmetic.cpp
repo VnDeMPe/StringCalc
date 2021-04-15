@@ -5,7 +5,6 @@
 //Basic Arithmetic operations Class
 
 //To do:
-//Add Try Catch Throw !!!! 
 //Expand functionality 
 //implement minus power fe 2^-3 
 

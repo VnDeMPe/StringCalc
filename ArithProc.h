@@ -12,7 +12,7 @@
 
 class ArithProc : public Arithmetic
 {
-protected: 
+private: 
 	  //inline static std::list<double> stringValues;
 	  //inline static std::list<char> stringOperands;
 	  inline static std::vector<double> arrayOfValues;

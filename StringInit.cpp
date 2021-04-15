@@ -4,8 +4,6 @@
 #include <iostream>
 
 // Class which prepares the string before the arithmetic calculations.
-// 3 times minus error 5 - - -2 it should be 5 + -2
-// 5*/2 error -  delete * 
 
 bool StringInit::IsAllowedSymbol(char c)
 {
@@ -31,6 +29,11 @@ bool StringInit::IsArithSymbol(char c)
 		return false;
 }
 
+bool StringInit::IsBracket(char c)
+{
+	return (c == '(' || c == ')') ? true : false;
+}
+
 std::string StringInit::StringInitialization(std::string inputString)
 {
 	std::string outputString;
@@ -49,16 +52,21 @@ std::string StringInit::RemoveSpaces(std::string inputString)  //	if there is sp
 std::string StringInit::CheckString(std::string inputString) //check integrity and syntax of the string
 {
 	bool syntaxErrorFound = true;
-	int i;
+	
 	while (syntaxErrorFound)
 	{
+		int i, openBrackets = 0;
 		try
 		{
 			if (IsArithSymbol(inputString[0]))  //if first digit is an operator add 0 
 				throw (CalcFirstDigitException(__FILE__, __LINE__, __func__, inputString));
-			int openBrackets=0;
+			if (inputString.size() == 0)
+				throw (CalcException("An Empty string. ",__FILE__, __LINE__, __func__,  "0 has been returned."));
+			
 			for (i = 0; i < inputString.size(); i++)
 			{
+				if ((isdigit(inputString[i]) && inputString[i + 1] == '(') || ((inputString[i] == ')') && isdigit(inputString[i + 1])))
+					throw (ForceMultiply());
 				if (isalpha(inputString[i]))
 					throw (CalcFoundAlphaException(__FILE__, __LINE__, __func__, inputString, i));
 				if (!isalnum(inputString[i]) && !IsAllowedSymbol(inputString[i]))
@@ -72,8 +80,10 @@ std::string StringInit::CheckString(std::string inputString) //check integrity a
 				if (inputString[i] == '(') openBrackets++;
 				if (inputString[i] == ')') openBrackets--;
 				if (openBrackets<0)
-					throw (CalcBracketSyntaxException(__FILE__, __LINE__, __func__, inputString, i));
+					throw (CalcBracketSyntaxException(__FILE__, __LINE__, __func__, inputString, i, openBrackets));
 			}
+			if (openBrackets > 0)
+				throw (CalcBracketSyntaxException(__FILE__, __LINE__, __func__, inputString, i, openBrackets));
 			syntaxErrorFound = false;
 		}
 		catch (CalcFirstDigitException& error)
@@ -110,9 +120,20 @@ std::string StringInit::CheckString(std::string inputString) //check integrity a
 		catch (CalcBracketSyntaxException& error)
 		{
 			std::cout << error.what() << error.get_info() << std::endl;
-			inputString.erase(i, 1); //remove the bracket
+			if (openBrackets < 0)
+				inputString.erase(i, 1); //remove the bracket
+			else
+				inputString.push_back(')');
 		}
-
+		catch (ForceMultiply& error)
+		{
+			inputString.insert(i+1, "*");
+		}
+		catch (CalcException& error)
+		{
+			std::cout << error.what() << error.get_info() << std::endl;
+			return "0";
+		}
 	}
 
 	return inputString;

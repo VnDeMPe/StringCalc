@@ -35,6 +35,10 @@ info(info_)
 	DispException();
 }
 
+CalcException::CalcException() : std::runtime_error("err")
+{
+}
+
 
 std::string CalcZeroException::get_info() const 
 { 
@@ -115,15 +119,21 @@ std::string CalcMinusSyntaxException::get_info() const
 	return (info + "' at position " + std::to_string(i) + ". Two minuses changed to plus");
 }
 
-CalcBracketSyntaxException::CalcBracketSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_) : CalcException("Syntax Error: Closing non open bracket.\n", file_, line_, func_, ("Closed Bracket symbol found without open symbol before: '" + arg1_.substr(i_, 2))),
+CalcBracketSyntaxException::CalcBracketSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_, int bracketNum_) : CalcException("Syntax Error: Bracket mismatch.\n", file_, line_, func_, ("" + arg1_.substr(i_, 2))),
 arg1(arg1_),
-i(i_)
+i(i_),
+bracketNum(bracketNum_)
 {
 }
 
 std::string CalcBracketSyntaxException::get_info() const
 {
-	return (info + "' at position " + std::to_string(i) + ". Bracket has been removed");
+	if (bracketNum<0)
+		return (info + "Found non opened bracket at position " + std::to_string(i) + ". Bracket has been removed");
+	else
+		return (info + "Found non closed bracket at position " + std::to_string(i) + ". Bracket has been added at the end of the string.");
 }
 
-
+ForceMultiply::ForceMultiply() : CalcException()
+{
+}

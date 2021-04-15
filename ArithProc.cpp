@@ -7,6 +7,7 @@
 
 //To do:
 //Separate scanstring with process string. There should be separated methods. One for scan and save to vectors, and second for process the data.
+// The String to Arrays method would save only brackets positions. Then in calclulation i would start from last open bracket(vector<int>) to first close bracket(vector<int>)
 //Protect from stack overflow
 //Clean the code, its getting messy
 
@@ -24,11 +25,9 @@ double ArithProc::CalculateIt(std::string inputString)
 void ArithProc::StringToArrays(std::string inputString) //	Scans the string, separates numbers and operators, saves it to the vector and calculates it. 
 {
 	ClearVectors();
-	bool minusDigit = false;
 
-	if (inputString[0] == '-')	//special exception for the first digit 
-		bool minusDigit = true; 
-		
+	bool minusDigit = (inputString[0] == '-') ? true : false; //special exception for the first digit 
+
 	while (inputString.size() > 0)
 	{	
 		if (isdigit(inputString[0]) || (inputString[0] == '.') || (minusDigit == true)) //	if its a digit, value is saved to an array. Afterwards digit in string is removed  

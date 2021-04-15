@@ -16,6 +16,7 @@ protected:
 
 public:
     CalcException(const char* msg, const char* file_, int line_, const char* func_, std::string info_);
+    CalcException();
     void DispException();
 
     const char* get_file() const;
@@ -101,10 +102,18 @@ class CalcBracketSyntaxException : public CalcException   // Found alphabet lett
 {
 private:
     std::string arg1;
-    int i;
+    int i, bracketNum;
 public:
-    CalcBracketSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_);
+    CalcBracketSyntaxException(const char* file_, int line_, const char* func_, std::string arg1_, int i_, int bracketNum_);
     virtual std::string get_info() const override;
 };
 
-#endif // !CALCEXCEPTION_H_  
+class ForceMultiply : public CalcException   // insert '*' betweren a digit and a bracket
+{
+private:
+    bool IsOpenBracket;
+public:
+    ForceMultiply();
+};
+
+#endif // !CALCEXCEPTION_H_
