@@ -10,21 +10,19 @@
 //getters setters
 
 
-class ArithProc : public Arithmetic
+class DataProcessing : public Arithmetic
 {
 private: 
 	  //inline static std::list<double> stringValues;
 	  //inline static std::list<char> stringOperands;
-	  inline static std::vector<double> arrayOfValues;
-	  inline static std::vector<char> arrayOfOperators;
-	  inline static std::vector<int> OperatorPositionLvl1, OperatorPositionLvl2, OperatorPositionLvl3;
+
 	  
 
 public:
 
 	static void ClearVectors();
 
-	static void StringToArrays(std::string inputString);
+	static double StringToArrays(std::string inputString);
 	static double DoTheMath();
 	static double CalculateIt(std::string inputString);
 

@@ -1,1 +1,1 @@
-D:\BckToSchool\MyProjects\StringCalc\Debug\StringCalc.exe
+D:\BckToSchool\MyProjects\StringCalc\Debug\StringCalc.dll

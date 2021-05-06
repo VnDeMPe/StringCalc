@@ -23,7 +23,7 @@ bool StringInit::IsSymbolTypoo(char c1, char c2)
 
 bool StringInit::IsArithSymbol(char c)
 {
-	if (c == '+' || c == '*' || c == '/' || c == '^' || c == '$')
+	if (c == '+' || c == '*' || c == '/' || c == '^' || c == '$' || c == '-')
 		return true;
 	else
 		return false;
@@ -55,83 +55,99 @@ std::string StringInit::CheckString(std::string inputString) //check integrity a
 	
 	while (syntaxErrorFound)
 	{
-		int i, openBrackets = 0;
+		unsigned int i;
+		int openBrackets = 0;
 		try
 		{
-			if (IsArithSymbol(inputString[0]))  //if first digit is an operator add 0 
+			if (IsArithSymbol(inputString[0]) && inputString[0] != '-')  //if first digit is an operator add 0 
 				throw (CalcFirstDigitException(__FILE__, __LINE__, __func__, inputString));
 			if (inputString.size() == 0)
 				throw (CalcException("An Empty string. ",__FILE__, __LINE__, __func__,  "0 has been returned."));
 			
 			for (i = 0; i < inputString.size(); i++)
 			{
-				if ((isdigit(inputString[i]) && inputString[i + 1] == '(') || ((inputString[i] == ')') && isdigit(inputString[i + 1])))
-					throw (ForceMultiply());
 				if (isalpha(inputString[i]))
 					throw (CalcFoundAlphaException(__FILE__, __LINE__, __func__, inputString, i));
 				if (!isalnum(inputString[i]) && !IsAllowedSymbol(inputString[i]))
 					throw (CalcNotAllowedCharException(__FILE__, __LINE__, __func__, inputString, i));
 				if (IsSymbolTypoo(inputString[i], inputString[i + 1]))
 					throw (CalcFoundTypooException(__FILE__, __LINE__, __func__, inputString, i));
-				if (IsArithSymbol(inputString[i]) && IsArithSymbol(inputString[i + 1]))
+				if ((IsArithSymbol(inputString[i]) || inputString[i] == '(') && (IsArithSymbol(inputString[i + 1]) && inputString[i + 1] != '-'))
 					throw (CalcOperatorsSyntaxException(__FILE__, __LINE__, __func__, inputString, i));
-				if (inputString[i]=='-' && inputString[i+1] == '-')
+				if (inputString[i]=='-' && inputString[i + 1] == '-')
 					throw (CalcMinusSyntaxException(__FILE__, __LINE__, __func__, inputString, i));
+				if (inputString[i] == '(' && inputString[i + 1] == ')')
+					throw (CalcEmptyBracketsException(__FILE__, __LINE__, __func__, inputString, i));
 				if (inputString[i] == '(') openBrackets++;
-				if (inputString[i] == ')') openBrackets--;
+				else if (inputString[i] == ')') openBrackets--;
 				if (openBrackets<0)
 					throw (CalcBracketSyntaxException(__FILE__, __LINE__, __func__, inputString, i, openBrackets));
+				if ((isdigit(inputString[i]) && inputString[i + 1] == '(') || ((inputString[i] == ')') && isdigit(inputString[i + 1])))
+					throw (ForceMultiply());
 			}
 			if (openBrackets > 0)
 				throw (CalcBracketSyntaxException(__FILE__, __LINE__, __func__, inputString, i, openBrackets));
+
+
+			if (IsArithSymbol(inputString[inputString.size()-1]))  //if the last char is an arithmetic symbol, erase it
+				inputString.erase(inputString.size()-1, 1);
+
 			syntaxErrorFound = false;
 		}
 		catch (CalcFirstDigitException& error)
 		{
-			std::cout << error.what() << error.get_info() << std::endl;
+			CalcException::LogException(error);
 			inputString.insert(0, "0"); //insert 0 at the begining
 		}
 		catch (CalcFoundAlphaException& error)
 		{
-			std::cout << error.what() << error.get_info() << std::endl;
+			CalcException::LogException(error);
 			inputString.erase(i, 1); //remove character
 		}
 		catch (CalcNotAllowedCharException& error)
 		{
-			std::cout << error.what() << error.get_info() << std::endl;
+			CalcException::LogException(error);
 			inputString.erase(i, 1); //remove character
 		}
 		catch (CalcFoundTypooException& error)
 		{
-			std::cout << error.what() << error.get_info() << std::endl;
-			inputString.erase(i, 1); //remove second symbol 
+			CalcException::LogException(error);
+			inputString.erase(i, 1); //remove first symbol 
 		}
 		catch (CalcOperatorsSyntaxException& error)
 		{
-			std::cout << error.what() << error.get_info() << std::endl;
-			inputString.erase(i, 1); //remove second symbol 
+			CalcException::LogException(error);
+			if (inputString[i] == '(')
+				inputString.erase(i+1, 1); //remove second symbol
+			else
+				inputString.erase(i, 1); //remove first symbol 
 		}
 		catch (CalcMinusSyntaxException& error)
 		{
-			std::cout << error.what() << error.get_info() << std::endl;
+			CalcException::LogException(error);
 			inputString.erase(i, 2); //remove two minuses 
 			inputString.insert(i, "+"); //replace it with plus
 		}
 		catch (CalcBracketSyntaxException& error)
 		{
-			std::cout << error.what() << error.get_info() << std::endl;
+			CalcException::LogException(error);
 			if (openBrackets < 0)
 				inputString.erase(i, 1); //remove the bracket
 			else
 				inputString.push_back(')');
 		}
+		catch (CalcEmptyBracketsException& error)
+		{
+			CalcException::LogException(error);
+			inputString.erase(i, 2); //remove pair of brackets
+		}
 		catch (ForceMultiply& error)
 		{
-			inputString.insert(i+1, "*");
+			inputString.insert(i + 1, "*");
 		}
 		catch (CalcException& error)
 		{
-			std::cout << error.what() << error.get_info() << std::endl;
+			CalcException::LogException(error);
 			return "0";
 		}
 	}

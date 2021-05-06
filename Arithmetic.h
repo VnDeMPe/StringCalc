@@ -2,7 +2,9 @@
 #ifndef ARITHMETIC_H_
 #define ARITHMETIC_H_
 
-class Arithmetic
+#include "BaseCalc.h"
+
+class Arithmetic : public BaseCalc
 {
 public:
 	static double Add(double arg1, double arg2);

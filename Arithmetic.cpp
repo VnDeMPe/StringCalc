@@ -21,13 +21,17 @@ double Arithmetic::Substract(double arg1, double arg2)
 double Arithmetic::Divide(double arg1, double arg2)
 {
 	try {
-		if (arg2 == 0)  throw CalcZeroException( __FILE__, __LINE__, __func__, arg1, arg2 );
+		if (arg2 == 0)
+		{
+			throw CalcZeroException(__FILE__, __LINE__, __func__, arg1, arg2);
+		}
+
 		return arg1 / arg2;
 	}
 
 	catch (CalcZeroException& error)
 	{
-		std::cout << error.what() << error.get_info() << std::endl;
+		CalcException::LogException(error);
 		return arg1 / 1;
 	}
 }

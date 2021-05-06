@@ -8,7 +8,7 @@
 class ArithDebug
 {
 private:
-	static bool debugMode;
+	static bool _debugMode;
 public:
 	static void SetDebugMode(bool isDebug);
 	static bool IsDebugMode();

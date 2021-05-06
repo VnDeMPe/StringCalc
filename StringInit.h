@@ -2,9 +2,9 @@
 #ifndef STRINGINIT_H_
 #define STRINGINIT_H_
 
-#include <string>
+#include "BaseCalc.h"
 
-class StringInit
+class StringInit : BaseCalc
 {
 public:
 	static bool IsAllowedSymbol(char c);
