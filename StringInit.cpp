@@ -82,7 +82,7 @@ std::string StringInit::CheckString(std::string inputString) //check integrity a
 				else if (inputString[i] == ')') openBrackets--;
 				if (openBrackets<0)
 					throw (CalcBracketSyntaxException(__FILE__, __LINE__, __func__, inputString, i, openBrackets));
-				if ((isdigit(inputString[i]) && inputString[i + 1] == '(') || ((inputString[i] == ')') && isdigit(inputString[i + 1])))
+				if ((isdigit(inputString[i]) && inputString[i + 1] == '(') || ((inputString[i] == ')') && isdigit(inputString[i + 1])) ||(inputString[i]==')' && inputString[i + 1] == '('))  // if its '2(' or ')2' or ')('
 					throw (ForceMultiply());
 			}
 			if (openBrackets > 0)

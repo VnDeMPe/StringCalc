@@ -14,7 +14,7 @@ namespace FrontEnd_Calc
     public partial class Form1 : Form
     {
 
-        public const string StringCalcDLL = @"\..\..\..\..\x64\Debug\Backend_Calc.dll";
+        public const string StringCalcDLL = @"\..\..\..\..\..\x64\Debug\Backend_Calc.dll";
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void AdddAnsi([MarshalAs(UnmanagedType.LPStr)] string str); // delegat 
