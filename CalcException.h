@@ -17,7 +17,7 @@ protected:
 
 public:
     CalcException(const char* msg, const char* file_, int line_, const char* func_, std::string info_);
-    CalcException();
+    CalcException(const char* msg);
     static void LogException(CalcException &err);
 
     void DispException();

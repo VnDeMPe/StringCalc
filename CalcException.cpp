@@ -42,7 +42,7 @@ _info(info_)
 	DispException();
 }
 
-CalcException::CalcException() : std::runtime_error("err")
+CalcException::CalcException(const char* msg) : std::runtime_error(msg)
 {
 }
 
@@ -141,7 +141,7 @@ std::string CalcBracketSyntaxException::get_info() const
 		return (_info + "Found non closed bracket at position " + std::to_string(_i) + ". Bracket has been added at the end of the string.");
 }
 
-ForceMultiply::ForceMultiply() : CalcException()
+ForceMultiply::ForceMultiply() : CalcException("")
 {
 }
 

@@ -10,8 +10,8 @@ namespace FrontEnd_Calc
 {
     static class Program
     {
-        public const string StringCalcDLL = @"\..\..\..\..\..\x64\Debug\Backend_Calc.dll";  //4 lvls up and x64\dbg\.dll
-       // public const string StringCalcDLL = @"D:\BckToSchool\MyProjects\StringCalc\x64\Debug\Backend_Calc.dll";
+        public const string StringCalcDLL = @"\..\..\..\..\..\x64\Debug\Backend_Calc.dll";  //4 lvls up and x64\dbg\.dll    //! FOR PUBLISH CHANGE TO  @"Backend_Calc.dll" and paste dll where exe is
+                                                                                            // public const string StringCalcDLL = @"D:\BckToSchool\MyProjects\StringCalc\x64\Debug\Backend_Calc.dll";
         [DllImport(StringCalcDLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern void intro();
 

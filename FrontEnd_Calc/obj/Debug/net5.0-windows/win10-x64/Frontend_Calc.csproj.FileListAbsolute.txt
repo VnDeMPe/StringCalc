@@ -512,3 +512,4 @@ D:\BckToSchool\MyProjects\StringCalc\FrontEnd_Calc\obj\Debug\net5.0-windows\win1
 D:\BckToSchool\MyProjects\StringCalc\FrontEnd_Calc\obj\Debug\net5.0-windows\win10-x64\ref\Frontend_Calc.dll
 D:\BckToSchool\MyProjects\StringCalc\FrontEnd_Calc\obj\Debug\net5.0-windows\win10-x64\Frontend_Calc.pdb
 D:\BckToSchool\MyProjects\StringCalc\FrontEnd_Calc\obj\Debug\net5.0-windows\win10-x64\Frontend_Calc.genruntimeconfig.cache
+D:\BckToSchool\MyProjects\StringCalc\FrontEnd_Calc\obj\Debug\net5.0-windows\win10-x64\Frontend_Calc.csprojAssemblyReference.cache
