@@ -25,7 +25,7 @@ public:
 
 
 extern "C" {
-	StringCalcLib double MarshalStringCalc(const char* pInputString, void (*addToList)(const char* pOutputString));
+	StringCalcLib double MarshalStringCalc(const char* pInputString, void (*addToList)(const char* pOutputString), int numFinDigital);
 
 	StringCalcLib void intro();
 }

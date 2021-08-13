@@ -10,13 +10,13 @@
 //Protect from stack overflow
 //Clean the code, its getting messy
 
-double DataProcessing::CalculateIt(std::string inputString)
+double DataProcessing::CalculateIt(std::string inputString, std::string& preparedString, int numFinalDecimals)
 {
 	std::string outputString;
 	outputString = StringInit::StringInitialization(inputString);
-	std::cout << "Input String: " << outputString << std::endl;
+	preparedString = outputString;
 	double result = DataProcessing::StringToArrays(outputString);
-	std::cout << "The result is: " << result << std::endl;
+	result = Round(result, true, numFinalDecimals);
 
 	return result;
 }

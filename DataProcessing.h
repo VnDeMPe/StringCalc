@@ -16,15 +16,13 @@ private:
 	  //inline static std::list<double> stringValues;
 	  //inline static std::list<char> stringOperands;
 
-	  
-
 public:
 
 	static void ClearVectors();
 
 	static double StringToArrays(std::string inputString);
 	static double DoTheMath();
-	static double CalculateIt(std::string inputString);
+	static double CalculateIt(std::string inputString, std::string& preparedString, int numFinalDecimals);
 
 };
 

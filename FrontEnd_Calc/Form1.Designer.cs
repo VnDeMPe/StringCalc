@@ -50,6 +50,9 @@ namespace FrontEnd_Calc
             this.listOutputConsole = new System.Windows.Forms.TextBox();
             this.authorLabel = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.numFinDigits = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.numFinDigits)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -243,12 +246,46 @@ namespace FrontEnd_Calc
             this.label15.TabIndex = 21;
             this.label15.Text = "No worries if you make some syntax error, it will be autocorrected!";
             // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(320, 294);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(149, 15);
+            this.label16.TabIndex = 23;
+            this.label16.Text = "Number of decimal places:";
+            // 
+            // numFinDigits
+            // 
+            this.numFinDigits.Location = new System.Drawing.Point(469, 291);
+            this.numFinDigits.Maximum = new decimal(new int[] {
+            9,
+            0,
+            0,
+            0});
+            this.numFinDigits.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numFinDigits.Name = "numFinDigits";
+            this.numFinDigits.Size = new System.Drawing.Size(34, 23);
+            this.numFinDigits.TabIndex = 24;
+            this.numFinDigits.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.numFinDigits.Value = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            // 
             // Form1
             // 
             this.AcceptButton = this.buttonCalculateIt;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(991, 455);
+            this.Controls.Add(this.numFinDigits);
+            this.Controls.Add(this.label16);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.authorLabel);
             this.Controls.Add(this.listOutputConsole);
@@ -272,7 +309,7 @@ namespace FrontEnd_Calc
             this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.Text = "String Calculator";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.numFinDigits)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -301,6 +338,8 @@ namespace FrontEnd_Calc
         private System.Windows.Forms.TextBox listOutputConsole;
         private System.Windows.Forms.Label authorLabel;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.NumericUpDown numFinDigits;
     }
 }
 

@@ -21,7 +21,7 @@ namespace FrontEnd_Calc
 
 
         [DllImport(StringCalcDLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern double MarshalStringCalc(string inputString, AdddAnsi str);
+        public static extern double MarshalStringCalc(string inputString, AdddAnsi str, int numFinDecimal);
 
 
         public Form1()
@@ -29,17 +29,12 @@ namespace FrontEnd_Calc
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             listOutputConsole.Clear();
 
             var logList = new List<string>();
-            double result = MarshalStringCalc(stringInputBox.Text, logList.Add);
+            double result = MarshalStringCalc(stringInputBox.Text, logList.Add, (int)numFinDigits.Value);
             
             stringOutputBox.Text = Convert.ToString(result);
 
@@ -52,7 +47,6 @@ namespace FrontEnd_Calc
             }
 
         }
-
 
     }
 }

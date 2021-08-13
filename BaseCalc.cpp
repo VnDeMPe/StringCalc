@@ -40,16 +40,12 @@ void BaseCalc::ClearOutputLog()
 ///
 /// MARSHAL FUNCTION DEFINITION
 /// 
-double  MarshalStringCalc(const char* pInputString, void (*addToList)(const char* pOutputString))
+double  MarshalStringCalc(const char* pInputString, void (*addToList)(const char* pOutputString),int numFinDigital)
 {
     BaseCalc::ClearOutputLog();
 
-
     std::string preparedString;
-    preparedString = StringInit::StringInitialization(pInputString);
-    std::cout << "Input String: " << preparedString << std::endl;
-    double result = DataProcessing::StringToArrays(preparedString);
-    std::cout << "The result is: " << result << std::endl;
+    double result = DataProcessing::CalculateIt(pInputString, preparedString, numFinDigital);
 
     addToList(preparedString.data());
 
@@ -67,7 +63,7 @@ void intro()
     std::cout << "Instructions:\n '+' for addition\n '-' for substraction\n '*' for multiplication\n '/' for division\n '^' for exponentiation (example: 2^5 will return 32)\n '$' for square rooting (example: 32$5 will return 2)\n" << std::endl;
     std::string testStr = " ((2 + 3) * ((4+ 5+ 6)*2) * 3 -128$7)";
     std::cout << "example input: " << testStr<<std::endl;
-    DataProcessing::CalculateIt(testStr);
+    //DataProcessing::CalculateIt(testStr);
 }
 
 ///
@@ -87,7 +83,7 @@ int main()
     std::cout << "Enter the data: ";
     std::getline(std::cin >>std::ws, inputString);
     std::cout << inputString << std::endl;
-    DataProcessing::CalculateIt(inputString);
+    //DataProcessing::CalculateIt(inputString);
     std::cout << "\nDo you want to calculate a new string? (type 'y' for yes): ";
     std::cin >> tryAgain;
     }     

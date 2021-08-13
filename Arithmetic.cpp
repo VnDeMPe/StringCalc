@@ -6,22 +6,53 @@
 
 //To do:
 //Expand functionality 
-//implement minus power fe 2^-3 
+//implement minus power for example  2^-3  - done
+
+//double Arithmetic::Round(double arg1)		// old version
+//{
+//	try
+//	{
+//		double tempValue = (long long int)(arg1 * 10000000 + .5);
+//		if (arg1 *10000000 + .5 > LLONG_MAX)
+//			throw CalcException("Overflow Exception. Decimal numbers have been rounded. Possible data loss.");
+//		return (double)tempValue / 10000000;
+//	}
+//	catch (CalcException& error)
+//	{
+//		CalcException::LogException(error);
+//		return round(arg1);
+//	}
+//}
 
 double Arithmetic::Round(double arg1)
 {
-	try
-	{
-		double tempValue = (long long int)(arg1 * 100 + .5);
-		if (arg1 *100 + .5 > LLONG_MAX)
-			throw CalcException("Overflow Exception. Decimal numbers have been rounded. Possible data loss.");
-		return (double)tempValue / 100;
-	}
-	catch (CalcException& error)
-	{
-		CalcException::LogException(error);
+	double tempValue = abs(arg1) - abs((long long int)arg1); 
+	if (tempValue < 0.00001 || tempValue > 0.999999)
 		return round(arg1);
+	else
+		return arg1;
+}
+
+double Arithmetic::Round(double arg1, bool endRound, int numDecimals)
+{
+	if (endRound)
+	{
+		try
+		{
+			long int decimalsMultplier = Power(10, numDecimals);
+			double tempValue = (long long int)(arg1 * decimalsMultplier);
+			if (arg1 * decimalsMultplier > LLONG_MAX)
+				throw CalcException("Overflow Exception. Decimal numbers have been rounded. Possible data loss.");
+			return (double)tempValue / decimalsMultplier;
+		}
+		catch (CalcException& error)
+		{
+			CalcException::LogException(error);
+			return round(arg1);
+		}
 	}
+	else
+		Round(arg1);
 }
 
 double Arithmetic::Add(double arg1, double arg2)
@@ -61,8 +92,16 @@ double Arithmetic::Multiply(double arg1, double arg2)
 double Arithmetic::Power(double arg1, int powerNum)
 {
 	double result = arg1;
-	for (int i = 0; i < (powerNum - 1); i++)
-		result = result * arg1;
+	if (powerNum > 0)
+	{
+		for (int i = 0; i < (powerNum - 1); i++)
+			result = result * arg1;
+	}
+	else
+	{
+		result = Power((1 / arg1), abs(powerNum));
+	}
+
 	return Arithmetic::Round(result);
 }
 

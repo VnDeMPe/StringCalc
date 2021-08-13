@@ -8,6 +8,7 @@ class Arithmetic : public BaseCalc
 {
 public:
 	static double Round(double arg1);
+	static double Round(double arg1, bool endRound, int numDecimals);
 	static double Add(double arg1, double arg2);
 	static double Substract(double arg1, double arg2);
 	static double Multiply(double aarg1, double arg2);
